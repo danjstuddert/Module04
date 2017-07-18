@@ -7,6 +7,8 @@ public class ExplosionTrigger : Triggerable {
 	public AudioClip explosionSound;
 
 	public override void Trigger () {
+		base.Trigger ();
+
 		explosionParticle.Play ();
 		AudioSource.PlayClipAtPoint (explosionSound, transform.position);
 	}
