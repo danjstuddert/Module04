@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerSpeed : MonoBehaviour {
 	public float minDistance;			// The minimum distance before the slow kicks in
+	public float minWalkSpeed;
 	public float slowScalar;			// The amount to slow the player speed by
 	public Transform distanceMarker;
 
@@ -33,12 +34,19 @@ public class PlayerSpeed : MonoBehaviour {
 			//Remove the min distance from the current distance so we can use it as a scalar
 			currentDistance -= minDistance;
 
-			player.walkSpeed = baseWalkSpeed / (currentDistance * slowScalar);
-			player.runSpeed = baseRunSpeed / (currentDistance * slowScalar);
+			float newSpeed = baseWalkSpeed / (currentDistance * slowScalar);
+
+			player.walkSpeed = newSpeed;
+
+			//Run speed is set to the new speed as well because deeper snow, running seems weird
+			player.runSpeed = newSpeed;
 
 			if(player.walkSpeed > baseWalkSpeed){
 				player.walkSpeed = baseWalkSpeed;
 				player.runSpeed = baseRunSpeed;
+			} else if(player.walkSpeed < minWalkSpeed){
+				player.walkSpeed = minWalkSpeed;
+				player.runSpeed = minWalkSpeed;
 			}
 		}
 		else{

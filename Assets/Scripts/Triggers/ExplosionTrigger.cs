@@ -9,7 +9,7 @@ public class ExplosionTrigger : Triggerable {
 	public override void Trigger () {
 		base.Trigger ();
 
-		explosionParticle.Play ();
-		AudioSource.PlayClipAtPoint (explosionSound, transform.position);
+		//explosionParticle.Play ();
+		//AudioSource.PlayClipAtPoint (explosionSound, transform.position);
 	}
 }

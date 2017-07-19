@@ -28,6 +28,6 @@ public class LifeSupport : MonoBehaviour {
 	}
 
 	private void Die(){
-		Debug.Log ("Dead");
+		GameController.Instance.PlayerDead ();
 	}
 }
