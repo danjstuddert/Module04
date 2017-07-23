@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,23 +15,50 @@ public class CrashTrailController : MonoBehaviour {
 	public float crashRadius;
 
 	private float currentSpawnTime;
+	private float currentFallSpeed;
 	private float count;
+
+	private Transform trailParent;
 
 	// Use this for initialization
 	void Start () {
-		SetSpawnTime ();
+		trailParent = new GameObject().transform;
+		trailParent.name = "CrashTrailParent";
+
+		SetSpawnParameters ();
 	}
 
-	void SetSpawnTime(){
+	void SetSpawnParameters(){
 		count = 0f;
 		currentSpawnTime = Random.Range (minSpawnTime, maxSpawnTime);
+		currentFallSpeed = Random.Range(minFallSpeed, maxFallSpeed);
 	}
 
-	void SpawnTrail(){
+	void Update() {
+		CheckTrailSpawn();
+	}
+
+	private void CheckTrailSpawn() {
+		count += Time.deltaTime;
+
+		if (count >= currentSpawnTime) {
+			SpawnTrail();
+			SetSpawnParameters();
+		}
+	}
+
+	private void SpawnTrail(){
 		Vector3 point = RandomPointOnUnitCircle (spawnRadius);
 		point = new Vector3 (point.x, spawnHeight, point.y);
 
-//		SimplePool.Spawn ();
+		//Spawn in the trail
+		GameObject go = SimplePool.Spawn(crashTrail, point, Quaternion.identity);
+		go.transform.SetParent(trailParent);
+
+		//Give the trail a point to move to
+		point = RandomPointOnUnitCircle(crashRadius);
+		point = new Vector3(point.x, 0f, point.y);
+		go.GetComponent<MoveToPoint>().Init(point, currentFallSpeed);
 	}
 
 	void OnValidate(){
@@ -40,8 +67,6 @@ public class CrashTrailController : MonoBehaviour {
 
 		if (maxSpawnTime < minSpawnTime)
 			maxSpawnTime = minSpawnTime;
-
-		//SimplePool.Spawn()
 	}
 
 	public static Vector2 RandomPointOnUnitCircle(float radius) {
@@ -50,5 +75,13 @@ public class CrashTrailController : MonoBehaviour {
 		float y = Mathf.Cos (angle) * radius;
 
 		return new Vector2 (x, y);
+	}
+
+	void OnDrawGizmosSelected() {
+		Gizmos.color = Color.red;
+		Gizmos.DrawWireSphere(transform.position, spawnRadius);
+
+		Gizmos.color = Color.blue;
+		Gizmos.DrawWireSphere(transform.position, crashRadius);
 	}
 }
