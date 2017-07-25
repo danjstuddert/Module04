@@ -10,6 +10,7 @@ ModelImporter:
     2300000: //RootNode
     3300000: //RootNode
     4300000: HydroLightsHalf
+    4300002: HydroponicBasin:HydroLightsHalf
     9500000: //RootNode
   materials:
     importMaterials: 1

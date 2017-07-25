@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 [RequireComponent (typeof (Rigidbody))]
@@ -23,7 +23,6 @@ public class PlayerController : MonoBehaviour {
 	//Body Movement
 	public float walkSpeed = 6;
 	public float runSpeed = 10;
-	public float strafeSpeed = 5;
 	public float gravity = 20;
 	public float jumpHeight = 2;
 	public bool canJump = true;
@@ -61,7 +60,8 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		// calculate how fast it should be moving
-		Vector3 targetVelocity = new Vector3(CheckMoveDirection(Input.GetAxis("Horizontal"),transform.right) * strafeSpeed, 0,CheckMoveDirection(Input.GetAxis ("Vertical"),transform.forward)* forwardAndBackSpeed);
+		Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).normalized;
+		targetVelocity = new Vector3(CheckMoveDirection(targetVelocity.x,transform.right) * forwardAndBackSpeed, 0,CheckMoveDirection(targetVelocity.z,transform.forward)* forwardAndBackSpeed);
 
 		targetVelocity = transform.TransformDirection(targetVelocity);
 		
@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(Input.GetKey(KeyCode.Escape))
 		{
-			UnityEngine.Cursor.visible = true;
+			Cursor.visible = true;
 			Cursor.lockState = CursorLockMode.None;
 		}
 	}
