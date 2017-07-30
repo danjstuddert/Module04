@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,27 +7,31 @@ public class PlayerSpeed : MonoBehaviour {
 	public float minWalkSpeed;
 	public float slowScalar;			// The amount to slow the player speed by
 	public Transform distanceMarker;
+	public float lowLifeThreshold;
 
 	private PlayerController player;
+	private LifeSupport lifeSupport;
 	private float baseWalkSpeed;
 	private float baseRunSpeed;
 
 	// Use this for initialization
 	void Start () {
 		player = GetComponent<PlayerController> ();
+		lifeSupport = GetComponent<LifeSupport>();
 		baseWalkSpeed = player.walkSpeed;
 		baseRunSpeed = player.runSpeed;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (player == null)
-			return;
-
 		CheckDistance ();
+		CheckLifeSupport();
 	}
 
 	private void CheckDistance(){
+		if (player == null)
+			return;
+
 		float currentDistance = Vector3.Distance (transform.position, distanceMarker.position);
 
 		if (currentDistance > minDistance) {
@@ -49,13 +53,23 @@ public class PlayerSpeed : MonoBehaviour {
 				player.runSpeed = minWalkSpeed;
 			}
 		}
-		else{
+		else if(lifeSupport.CurrentLifeAmount > lowLifeThreshold){
 			if(player.walkSpeed != baseWalkSpeed){
 				player.walkSpeed = baseWalkSpeed;
 				player.runSpeed = baseRunSpeed;
 			}
 		} 
 			
+	}
+
+	private void CheckLifeSupport() {
+		if (lifeSupport == null)
+			return;
+
+		if(lifeSupport.CurrentLifeAmount <= lowLifeThreshold && player.walkSpeed > 0) {
+			player.walkSpeed -= Time.deltaTime / 5f;
+			player.runSpeed -= Time.deltaTime / 5f;
+		}
 	}
 
 	void OnDrawGizmosSelected(){

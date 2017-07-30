@@ -11,13 +11,13 @@ public class LifeSupport : MonoBehaviour {
 	public Transform crashingPod;
 	public float lookAtSpeed;
 
-	private float currentLifeAmount;
+	public float CurrentLifeAmount { get; private set;}
 	private bool hasDied;
 
 	// Use this for initialization
 	void Start () {
-		currentLifeAmount = lifeAmount;
-		UIController.Instance.UpdateLifeSupportText(currentLifeAmount);
+		CurrentLifeAmount = lifeAmount;
+		UIController.Instance.UpdateLifeSupportText(CurrentLifeAmount);
 	}
 	
 	// Update is called once per frame
@@ -26,13 +26,13 @@ public class LifeSupport : MonoBehaviour {
 	}
 
 	private void DrainLifeSupport(){
-		currentLifeAmount -= lifeDrainPerSecond * Time.deltaTime;
-		UIController.Instance.UpdateLifeSupportText(currentLifeAmount);
+		CurrentLifeAmount -= lifeDrainPerSecond * Time.deltaTime;
+		UIController.Instance.UpdateLifeSupportText(CurrentLifeAmount);
 
-		if (currentLifeAmount <= frostIncreaseStart)
+		if (CurrentLifeAmount <= frostIncreaseStart)
 			GrowFrostEffect();
 
-		if (currentLifeAmount <= 0f)
+		if (CurrentLifeAmount <= 0f)
 			Die ();
 	}
 
