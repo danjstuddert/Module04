@@ -19,8 +19,8 @@ public class ExplosionTrigger : Triggerable {
 		float distance = heading.magnitude;
 		Vector3 direction = heading / distance;
 
-		AudioSource.PlayClipAtPoint (explosionSound, direction, 50);
-		Invoke("Explode", explosionSound.length / 5);
+		AudioSource.PlayClipAtPoint (explosionSound, GameObject.FindWithTag("Player").transform.position + direction, 50);
+		Invoke("Explode", explosionSound.length / 8);
 	}
 
 	private void Explode() {
