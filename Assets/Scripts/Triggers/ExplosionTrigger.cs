@@ -9,8 +9,10 @@ public class ExplosionTrigger : Triggerable {
 	public float explosionForce;
 	public float explosionRadius;
 
-
 	public override void Trigger () {
+		if (hasTriggered)
+			return;
+
 		base.Trigger ();
 
 		Vector3 heading = transform.position - GameObject.FindWithTag("Player").transform.position;

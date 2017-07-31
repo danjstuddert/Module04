@@ -41,10 +41,6 @@ public class LifeSupport : MonoBehaviour {
 	}
 
 	private void Die(){
-		Vector3 direction = crashingPod.transform.position - transform.position;
-		direction = Vector3.RotateTowards(transform.forward, direction, lookAtSpeed * Time.deltaTime, 0f);
-		transform.rotation = Quaternion.LookRotation(direction);
-
 		if (hasDied)
 			return;
 
